@@ -29,6 +29,7 @@ const addFood = async(req,res) =>{
         console.log(error);
         res.json({success:false,message:error.message})
     }
+    
 }
 
 // all food list 

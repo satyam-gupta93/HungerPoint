@@ -1,9 +1,10 @@
 
 
 import React, { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../context/storeContext';
+
 import { assets } from '../assets/assets';
 import FoodItem from './FoodItem';
+import { StoreContext } from '../context/StoreContext';
 
 
 const FoodDisplay = ({ category }) => {

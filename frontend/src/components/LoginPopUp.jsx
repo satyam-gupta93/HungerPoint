@@ -1,10 +1,16 @@
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState ,useEffect,} from 'react'
 import { StoreContext } from '../context/StoreContext'
+import axios from "axios"
+import { useNavigate } from 'react-router-dom'
 
 const LoginPopUp = () => {
 
-    const url = useContext(StoreContext)
+    const navigate = useNavigate()
+       const url = "http://localhost:4000"
+
+       const {token,setToken} = useContext(StoreContext);
+       
 
     const [currState,setCurrState] = useState('Sign Up')
     const [data,setData] = useState({
@@ -27,16 +33,42 @@ const LoginPopUp = () => {
     const onSubmitHandler = async (event) => {
         event.preventDefault();
         console.log(data)
+        // const formData = new FormData;
 
+        // formData.append("name",data.name);
+        // formData.append("email",data.email);
+        // formData.append("password",data.password);
+         let newURL = url;
+        if(currState==='Login'){
+            newURL += '/api/user/login'
+        }else{
+            newURL += '/api/user/register'
+        }
 
-        setData({
-            name:"",
-            email:"",
-            password:""
-        })
+        const response = await axios.post(newURL,data);
+        if(response.data.success){
+            console.log(response.data.token)
+            setToken(response.data.token);
+           
+            localStorage.setItem("token",response.data.token)
+            setData({
+                name:"",
+                email:"",
+                password:""
+                
+            })
+            
+        }
+       else{
+        alert(response.data.message)
+       }
     }
     
-  
+    useEffect(() => {
+        if (token) {
+          navigate('/')
+        }
+      }, [token])
     
   return (
     <div className='mt-10'>
